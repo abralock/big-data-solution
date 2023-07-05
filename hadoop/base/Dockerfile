@@ -1,4 +1,4 @@
-FROM debian:bullseye
+FROM debian:bookworm
 
 #Moving in PySpark/Hadoop test to the container(Write/Reading dataframe)
 COPY test.py /
@@ -9,16 +9,20 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-ins
 	  openjdk-8-jdk \
 	  net-tools \
       curl \
-      # netcat \
+      netcat-traditional \
       gnupg \
       libsnappy-dev \
       nano \
       wget \
     && rm -rf /var/lib/apt/lists/*
 RUN apt-get update && apt-get upgrade -y
+
+#RUN apt-get install -y make build-essential libssl-dev zlib1g-dev \
+#       libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
+#       libncurses5-dev libncursesw5-dev xz-utils tk-dev
 RUN apt-get install -y make build-essential libssl-dev zlib1g-dev \
        libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
-       libncurses5-dev libncursesw5-dev xz-utils tk-dev
+        xz-utils tk-dev
 RUN wget https://www.python.org/ftp/python/3.8.4/Python-3.8.4.tgz --no-check-certificate
 RUN tar xzf Python-3.8.4.tgz
 RUN cd Python-3.8.4 && ./configure --enable-optimizations && make -j 8 && make altinstall
